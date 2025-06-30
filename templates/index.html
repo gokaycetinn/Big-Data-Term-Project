@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Recommendation | Product Recommendation System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-hover: #4f46e5;
+            --secondary-color: #ec4899;
+            --accent-color: #8b5cf6;
+            --light-bg: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            --dark-bg: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            --light-card: #ffffff;
+            --dark-card: #1e293b;
+            --light-text: #1e293b;
+            --dark-text: #f1f5f9;
+            --border-radius: 1rem;
+            --card-radius: 0.75rem;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+          body {
+            background: var(--light-bg);
+            font-family: 'Poppins', sans-serif;
+            transition: var(--transition);
+            padding-top: 80px;
+            color: var(--light-text);
+        }
+        
+        .navbar {
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: var(--shadow-md);
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .main-container {
+            background-color: var(--light-card);
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .main-container::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            opacity: 0.1;
+            border-radius: 50%;
+            z-index: 0;
+            filter: blur(40px);
+        }
+        
+        h2, h5 {
+            font-weight: bold;
+        }
+        
+        .table th {
+            background-color: #f8f9fa;
+        }
+        
+        .form-control:focus {
+            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+        
+        .card {
+            transition: var(--transition);
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+        
+        /* Card View */
+        .card-product {
+            height: 100%;
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            position: relative;
+            transition: var(--transition);
+        }
+        
+        .card-product:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-product::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+        
+        .card-product .card-body {
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+        }
+        
+        .card-product .card-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .card-product .card-subtitle {
+            color: #6c757d;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        
+        .view-toggle {
+            margin-bottom: 20px;
+        }
+        
+        .badge {
+            padding: 0.5rem 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            border-radius: 6px;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .table {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand animate__animated animate__fadeIn" href="#">
+                Product Recommendations
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><i class="fas fa-home me-1"></i>Home</a>
+                    </li>
+                   
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-info-circle me-1"></i>About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->    <div class="container main-container">
+        <h2 class="text-center mb-4" data-aos="fade-up">
+            Product Recommendations
+        </h2>
+        
+        <div class="row mb-4">
+            <div class="col-md-12" data-aos="fade-right" data-aos-delay="100">
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-body">
+                        <h5 class="mb-3"><i class="fas fa-search me-2 text-primary"></i>Customer-Specific Recommendations</h5>
+                        <form id="recommendationForm" method="POST">
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0">
+                                    <i class="fas fa-user text-primary"></i>
+                                </span>
+                                <input type="number" name="customer_id" id="customerIdInput" class="form-control border-start-0" placeholder="Enter Customer ID" required>
+                                <button type="submit" class="btn btn-primary px-4">
+                                    <i class="fas fa-bolt me-2"></i>Show Recommendations
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+          <!-- Loading Indicator -->
+        <div id="loadingIndicator" class="loading">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading recommendations...</p>
+        </div>
+
+        <!-- Hata Mesajları -->
+        
+
+        <div class="mt-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h5><i class="fas fa-user me-2"></i>Recommendations for Customer ID: <span class="text-primary">{{ customer_id }}</span></h5>
+                    
+                    <small class="text-muted">Date: 25.05.2025</small>
+                    
+                </div>
+                
+            </div>
+            
+            <!-- Table View -->
+            <div id="tableView" class="view-container">                <table class="table table-hover mt-3">
+                    <thead>
+                        <tr>
+                            <th>Product ID</th>
+                            <th>Product Name</th>
+                            <th>Price</th>
+                            <th>Country</th>
+                            <th>Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if recommendations %}
+        {% for rec in recommendations %}
+        <tr>
+            <td>{{ rec.StockCode }}</td>
+            <td>{{ rec.Description }}</td>
+            <td>{{ rec.UnitPrice }}</td>
+            <td>{{ rec.Country }}</td>
+            <td>{{ rec.PredictedRating }}</td>
+        </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="5" class="text-center">No recommendations available for the entered Customer ID.</td>
+        </tr>
+    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+        <!-- Toast Notification -->
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="notificationToast">
+            <div class="toast-header">
+                <strong class="me-auto">Notification</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastMessage">
+                Operation successful!
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap and other scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist@2.9.0/plotly.min.js"></script>
+    <script>
+        // Initialize AOS animation library
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+        
+        // View Toggle
+        const tableViewBtn = document.getElementById('tableViewBtn');
+        const cardViewBtn = document.getElementById('cardViewBtn');
+        const tableView = document.getElementById('tableView');
+        const cardView = document.getElementById('cardView');
+        
+        if (tableViewBtn && cardViewBtn) {
+            tableViewBtn.addEventListener('click', () => {
+                tableView.style.display = 'block';
+                cardView.style.display = 'none';
+                tableViewBtn.classList.add('active');
+                cardViewBtn.classList.remove('active');
+                localStorage.setItem('preferredView', 'table');
+            });
+            
+            cardViewBtn.addEventListener('click', () => {
+                tableView.style.display = 'none';
+                cardView.style.display = 'flex';
+                tableViewBtn.classList.remove('active');
+                cardViewBtn.classList.add('active');
+                localStorage.setItem('preferredView', 'card');
+            });
+            
+            // Load preferred view from local storage
+            const preferredView = localStorage.getItem('preferredView');
+            if (preferredView === 'card') {
+                cardViewBtn.click();
+            }
+        }
+        
+        // Toast Notification
+        const toast = new bootstrap.Toast(document.getElementById('notificationToast'));
+        
+        function showToast(message) {
+            document.getElementById('toastMessage').textContent = message;
+            toast.show();
+        }
+
+        // Clear Search History
+        document.getElementById('clear-history').addEventListener('click', function() {
+            fetch('/clear_history', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    location.reload();
+                });
+        });
+    </script>
+</body>
+</html>
