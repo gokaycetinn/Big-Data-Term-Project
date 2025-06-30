@@ -55,6 +55,21 @@ This project implements a scalable big data system for processing and analyzing 
 - Flask (Python)
 - Plotly
 
+## 📸 Screenshots
+
+### 🖥️ Web Interface
+A view of the real-time recommendation system's user interface:
+![Web Interface](./images/web-interface.png)
+
+### 📊 MongoDB – Recommendation Data
+The structure of the recommendation data stored in MongoDB:
+![MongoDB 1](./images/mongo1.jpg)
+
+### 📁 MongoDB – Retail Transactions Collection
+Sample view of retail transaction data in MongoDB:
+![MongoDB 2](./images/mongo2.jpg)
+
+
 ## 🧠 Authors
 
 - Hasan Emre Usta — `202111301`  
